@@ -1,0 +1,4 @@
+CLIENT_GROUP = "" # you can get this from cmd=clientgroups
+USERNAME, PASSWORD = ("username", "password")
+MAIN_URL = "http://naujamokykla.lt/verservice/verservice.php" # change this only if something changes in their api
+USER_AGENT = "Dalvik/2.1.0 (Linux; U; Android 7.1.1; Android SDK built for x86 Build/NYC)" # this too
