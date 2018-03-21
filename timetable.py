@@ -1,3 +1,6 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 import config
 import requests
 from bs4 import BeautifulSoup as bs
@@ -26,8 +29,6 @@ def post(cmd, additionalArgs={}):
 
     url = formatUrl(cmd)
     url = formatAdditionalArgs(url, additionalArgs)
-
-    print "post url, ", url
 
     req = requests.post(url, headers={'User-Agent': config.USER_AGENT}, data={"ClientGroup": clientGroup, "UserCode": username, "UserPass": password})
     return req.content
@@ -70,18 +71,38 @@ def removeDupes(testList):
             subjects.append(test["subject"])
     return newTestList
 
-def printUpcomingTests(upcoming_tests):
-    print "Upcoming tests:"
+def countTests(upcoming_tests):
+    cnt = 0
 
     for date in upcoming_tests:
-        print "----{0}----".format(date)
+        tests = removeDupes(upcoming_tests[date])
+        cnt += len(tests)
+
+    return cnt
+
+def printUpcomingTests(upcoming_tests):
+    testCount = countTests(upcoming_tests)
+
+    if testCount == 0:
+        color = "green"
+    elif testCount == 1:
+        color = "orange"
+    elif testCount > 1:
+        color = "red"
+
+    print "{0} upcoming tests | color = {1}".format(testCount, color)
+
+    print "---"
+
+    for date in upcoming_tests:
+        print "{0} | color = #0000ff".format(date)
         tests = removeDupes(upcoming_tests[date])
         for test in tests:
             test_string = test["subject"]
             if test["info"] != "":
                 test_string += test["info"]
-            print test_string
+            print test_string + " | color = #ffffff"
+
 
 upcoming_tests = parseTests()
 printUpcomingTests(upcoming_tests)
-
